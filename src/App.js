@@ -1,26 +1,94 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { Component } from 'react';
+import { List, Card, Avatar, Row, Col, Carousel } from 'antd';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      list: null,
+    };
+  }
+
+  componentDidMount() {
+    setTimeout(() => {
+      this.setState({
+        list: [{
+          name: "测试任务",
+          desc: "task description",
+        }, {
+          name: "chaos test",
+          desc: "description",
+        }, {
+          name: "this is a test",
+          desc: "task description",
+        }, {
+          name: "dashboard test",
+          desc: "description",
+        }, {
+          name: "screenshot test",
+          desc: "task description",
+        }, {
+          name: "vvv test",
+          desc: "description",
+        }],
+      });
+    }, 2000);
+  }
+
+  render() {
+    return (<Row type="flex" justify="space-around" style={{marginTop: 12}}>
+      <Col span={18}>
+        <List
+          grid={{
+            gutter: 16,
+            xs: 2,
+            sm: 2,
+            md: 3,
+            lg: 3,
+            xl: 4,
+            xxl: 4,
+          }}
+          dataSource={this.state.list || []}
+          renderItem={item => (
+            <List.Item>
+              <a href={item.grafana} target="_blank" rel="noopener noreferrer">
+                <Card 
+                  cover={<Carousel autoplay>
+                    <iframe src="http://127.0.0.1:3000/d-solo/H3wXWqfWz/chaos-monitor?&panelId=2" 
+                            width="300" 
+                            height="150" 
+                            frameBorder="0">        
+                    </iframe>
+                    <iframe src="http://127.0.0.1:3000/d-solo/H3wXWqfWz/chaos-monitor?&panelId=3" 
+                            width="300" 
+                            height="150" 
+                            frameBorder="0">        
+                    </iframe>
+                  </Carousel>
+                    
+                  }
+                >
+                  <Card.Meta
+                    avatar={<Avatar style={{background: this.color(item.name)}}>{item.name[0].toUpperCase()}</Avatar>}
+                    title={item.name}
+                    description={item.desc}
+                  />
+                </Card>
+              </a>
+            </List.Item>
+          )}
+          loading={!this.state.list}
+        />
+      </Col>
+    </Row>);
+  }
+
+  color(str) {
+    const char = str[0];
+    const colors = ["#f50", "#2db7f5", "#87d068", "#108ee9"];
+    return colors[char.charCodeAt() % colors.length];
+  }
 }
 
 export default App;
