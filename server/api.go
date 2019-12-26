@@ -7,16 +7,17 @@ import (
 	"strings"
 	"path"
 	"fmt"
+	"os"
 )
 
-func dashboard(w http.ResponseWriter, r *http.Request) {
+func api(w http.ResponseWriter, r *http.Request) {
 	ss := strings.Split(r.URL.Path, "/")
-	if len(ss) < 3 {
+	if len(ss) < 2 {
 		w.WriteHeader(400)
 		return
 	}
 
-	u := "http://" + ss[2] + "-chaos-grafana:3000"
+	u := "http://" + path.Join(os.Getenv("CHAOS_API_HOST"), path.Join(ss[2:]...))
 	url, err := url.Parse(u)
 	if err != nil {
 		w.WriteHeader(400)
@@ -25,7 +26,7 @@ func dashboard(w http.ResponseWriter, r *http.Request) {
 	}
 
 	r.URL.Host = url.Host
-	r.URL.Path = path.Join(ss[3:]...)
+	r.URL.Path = path.Join(ss[2:]...)
 	r.Host = url.Host
 
 	proxy := httputil.NewSingleHostReverseProxy(url)

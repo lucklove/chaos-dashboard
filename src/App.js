@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { List, Card, Avatar, Row, Col, Carousel } from 'antd';
+import axios from 'axios';
 import './App.css';
 
 class App extends Component {
@@ -10,7 +11,11 @@ class App extends Component {
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
+        /*
+    const namespaces = axios.get('/api/namespaces');
+    this.setState({list: namespaces});
+*/
     setTimeout(() => {
       this.setState({
         list: [{
@@ -55,12 +60,12 @@ class App extends Component {
               <a href={item.grafana} target="_blank" rel="noopener noreferrer">
                 <Card 
                   cover={<Carousel autoplay>
-                    <iframe src="http://127.0.0.1:3000/d-solo/H3wXWqfWz/chaos-monitor?&panelId=2" 
+                    <iframe src={`/dashboard/${item.name}/d-solo/H3wXWqfWz/chaos-monitor?&panelId=2`}
                             width="300" 
                             height="150" 
                             frameBorder="0">        
                     </iframe>
-                    <iframe src="http://127.0.0.1:3000/d-solo/H3wXWqfWz/chaos-monitor?&panelId=3" 
+                    <iframe src={`/dashboard/${item.name}/d-solo/H3wXWqfWz/chaos-monitor?&panelId=3`} 
                             width="300" 
                             height="150" 
                             frameBorder="0">        
